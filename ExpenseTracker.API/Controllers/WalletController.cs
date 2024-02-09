@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ExpenseTracker.DataService.Data;
 using ExpenseTracker.DataService.Interface.Repo;
+using ExpenseTracker.Entities.DbSet;
+using ExpenseTracker.Entities.Dtos.Wallet;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,8 +16,30 @@ public class WalletController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var customer = await _unitOfWork.Category.GetAll();
+        var customer = await _unitOfWork.Wallet.GetAll();
 
-        return Ok();
+        return Ok(customer);
     }
+
+    [HttpGet("{walletId}")]
+    public async Task<IActionResult> GetWalletById(int walletId)
+    {
+        return Ok(await _unitOfWork.Wallet.GetById(walletId));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateWallet([FromBody] CreateWalletDto request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        var result = _mapper.Map<Wallet>(request);
+
+        await _unitOfWork.Wallet.Add(result);
+
+        await _unitOfWork.SaveAsync();
+
+        return Ok(result);
+    }
+
 }

@@ -13,6 +13,8 @@ public class UnitOfWork : IUnitOfWork
 
     public IWalletRepository Wallet { get; }
 
+    public ITransactionDetails Transaction { get; }
+
     public UnitOfWork(ApplicationDbContext dbContext, ILoggerFactory loggerFactory)
     {
         _dbContext = dbContext;
@@ -20,7 +22,10 @@ public class UnitOfWork : IUnitOfWork
         var logger = loggerFactory.CreateLogger("logs");
 
         Category = new CategoryRepository(dbContext, logger);
+
         Wallet = new WalletRepository(dbContext, logger);
+
+        Transaction = new TransactionRepository(dbContext, logger);
     }
 
     public async Task<bool> SaveAsync()
