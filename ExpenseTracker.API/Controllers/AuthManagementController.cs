@@ -17,12 +17,12 @@ namespace ExpenseTracker.API.Controllers;
 public class AuthManagementController : ControllerBase
 {
     private readonly ILogger<AuthManagementController> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtConfig _jwtConfig;
 
     public AuthManagementController(
         ILogger<AuthManagementController> logger, 
-        UserManager<IdentityUser> userManager,
+        UserManager<ApplicationUser> userManager,
         IOptionsMonitor<JwtConfig> optionsMonitor)
     {
         _logger = logger;
@@ -37,19 +37,21 @@ public class AuthManagementController : ControllerBase
         if (ModelState.IsValid)
         {
             var emailExist = await _userManager.FindByEmailAsync(request.Email);
-
+                
             if (emailExist != null)
                 return BadRequest("Emai already exist");
 
-            IdentityUser newUser = new()
+            ApplicationUser newUser = new()
             {
                 Email = request.Email,
                 UserName = request.Email,
+                FirstName = "admin",
+                LastName = "admin"
             };
 
-            var isCreated = await _userManager.CreateAsync(newUser, request.Password);
+            var result = await _userManager.CreateAsync(newUser, request.Password);
 
-            if (isCreated.Succeeded)
+            if (result.Succeeded)
             {
 
                 var token = GenerateJwtToken(newUser);
@@ -61,7 +63,7 @@ public class AuthManagementController : ControllerBase
                 });
             }
 
-            return BadRequest(isCreated.Errors.Select(x => x.Description).ToList());
+            return BadRequest(result.Errors.Select(x => x.Description).ToList());
         }
 
         return BadRequest("Invalid request payload");
@@ -94,7 +96,7 @@ public class AuthManagementController : ControllerBase
         return BadRequest("Invalid request payload");
     }
 
-    private string GenerateJwtToken(IdentityUser user)
+    private string GenerateJwtToken(ApplicationUser user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
@@ -103,7 +105,7 @@ public class AuthManagementController : ControllerBase
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim("Id", user.Id),
+                new Claim("Id", user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

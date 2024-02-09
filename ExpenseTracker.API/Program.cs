@@ -1,5 +1,9 @@
 using ExpenseTracker.API.Configurations;
 using ExpenseTracker.DataService.Data;
+using ExpenseTracker.DataService.Interface.Repo;
+using ExpenseTracker.DataService.Models;
+using ExpenseTracker.DataService.Repositories;
+using ExpenseTracker.Entities.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,9 +25,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Added default identity
-builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => 
     options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AppDbContext>();
+    //.AddRoles<ApplicationRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Specifying default authentication mechanism, beacuse there is such, cookie auth, token auth, saml auth
 // Configuring the web api to tell what type of auth I wanna implement
@@ -52,6 +57,8 @@ builder.Services.AddCors(options => options.AddPolicy("FrontEnd", policy =>
 {
     policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
 }));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

@@ -13,7 +13,7 @@ public class TransactionDetails : BaseEntity
     public string Description { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }
-    public Categories Category { get; set; } = null;
+    public Category Category { get; set; } = null;
     public Wallet Wallet { get; set; }
     public TransactionType TransactionType { get; set; }
 }
