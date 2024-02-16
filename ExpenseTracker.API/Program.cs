@@ -56,21 +56,31 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddCors(options => options.AddPolicy("FrontEnd", policy =>
-{
-    policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
-}));
+// Set what origin is allowed to request from api
+//builder.Services.AddCors(options => options.AddPolicy("FrontEnd", policy =>
+//{
+//    policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+//    options.AddPolicy("AllowOrigin",
+//      builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+//}));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+//app.UseCors(options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+
+//}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();

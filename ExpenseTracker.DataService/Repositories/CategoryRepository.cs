@@ -17,6 +17,7 @@ public class CategoryRepository : BaseRepostory<Category>, ICategoryRepository
     public override async Task<IEnumerable<Category>> GetAll()
     {
         try
+        
         {
             return await _dbSet.ToListAsync();
         }
