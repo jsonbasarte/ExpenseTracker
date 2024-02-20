@@ -2,11 +2,14 @@
 using ExpenseTracker.DataService.Interface.Repo;
 using ExpenseTracker.Entities.DbSet;
 using ExpenseTracker.Entities.Dtos.TransactionDetails;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.API.Controllers;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class TransactionController : BaseController
 {
     public TransactionController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
