@@ -12,6 +12,8 @@ public class RequestToDomain : Profile
     {
         CreateMap<CreateCategoryDto, Category>();
 
+        CreateMap<UpdateCategoryDto, Category>();
+
         CreateMap<CreateWalletDto, Wallet>()
             .ForMember(
                 des => des.Name,

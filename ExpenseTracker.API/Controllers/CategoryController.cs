@@ -42,5 +42,19 @@ namespace ExpenseTracker.API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryDto request)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+
+            var result = _mapper.Map<Category>(request);
+
+            await _unitOfWork.Category.Update(result);
+
+            await _unitOfWork.SaveAsync();
+
+            return Ok(result);
+        }
     }
 }
