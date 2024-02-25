@@ -22,6 +22,14 @@ public class RequestToDomain : Profile
                 des => des.Type,
                 option => option.MapFrom(src => src.WalletType));
 
+        CreateMap<UpdateWalletDto, Wallet>()
+            .ForMember(
+                des => des.Name,
+                option => option.MapFrom(src => src.WalletName))
+            .ForMember(
+                des => des.Type,
+                option => option.MapFrom(src => src.WalletType));
+
         CreateMap<CreateTransactionDto, TransactionDetails>()
               .ForMember(
                 des => des.DateCreated,

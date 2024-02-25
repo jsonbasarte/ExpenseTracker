@@ -45,4 +45,19 @@ public class WalletController : BaseController
         return Ok(result);
     }
 
+    [HttpPut]
+    public async Task<IActionResult> UpdateWallet([FromBody] UpdateWalletDto request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
+        var result = _mapper.Map<Wallet>(request);
+
+        await _unitOfWork.Wallet.Update(result);
+
+        await _unitOfWork.SaveAsync();
+
+        return Ok(request);
+    }
+
 }

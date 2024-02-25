@@ -26,4 +26,27 @@ public class WalletRepository : BaseRepostory<Wallet>, IWalletRepository
             throw;
         }
     }
+
+    public override async Task<bool> Update(Wallet param)
+    {
+        try
+        {
+            var wallet = await _dbSet.FirstOrDefaultAsync(prop => prop.Id == param.Id);
+
+            if (wallet == null)
+                return false;
+
+            wallet.Name = param.Name;
+            wallet.Balance = param.Balance;
+            wallet.Type = param.Type;
+
+            return true;
+        }
+        catch(Exception e)
+        {
+            _logger.LogError(e, "{Repo} Update Category error", typeof(CategoryRepository));
+            throw;
+        }
+    }
+
 }
