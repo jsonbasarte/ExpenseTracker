@@ -57,12 +57,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Set what origin is allowed to request from api
-//builder.Services.AddCors(options => options.AddPolicy("FrontEnd", policy =>
-//{
-//    policy.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
-//    options.AddPolicy("AllowOrigin",
-//      builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-//}));
+builder.Services.AddCors(options => options.AddPolicy("FrontEnd", policy =>
+{
+    policy.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader();
+    options.AddPolicy("AllowOrigin",
+      builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+}));
 
 builder.Services.AddCors(options =>
 {

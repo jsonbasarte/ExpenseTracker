@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
 public class WalletController : BaseController
 {
@@ -21,7 +21,7 @@ public class WalletController : BaseController
     {
         var customer = await _unitOfWork.Wallet.GetAll();
 
-        return Ok(customer);
+        return Ok(_mapper.Map<IEnumerable<GetWalletDto>>(customer));
     }
 
     [HttpGet("{walletId}")]
