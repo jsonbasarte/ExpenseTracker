@@ -19,7 +19,8 @@ public class TransactionController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok(await _unitOfWork.Transaction.GetAll());
+        var transaction = await _unitOfWork.Transaction.GetAll();
+        return Ok(_mapper.Map<IEnumerable<GetTransactionDto>>(transaction));
     }
 
     [HttpGet("{customerId}")]

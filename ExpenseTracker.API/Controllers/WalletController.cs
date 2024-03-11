@@ -21,7 +21,7 @@ public class WalletController : BaseController
     {
         var customer = await _unitOfWork.Wallet.GetAll();
 
-        return Ok(customer);
+        return Ok(_mapper.Map<IEnumerable<GetWalletDto>>(customer));
     }
 
     [HttpGet("{walletId}")]
