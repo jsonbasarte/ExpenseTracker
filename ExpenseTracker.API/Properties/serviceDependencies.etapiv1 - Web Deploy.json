@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "mssql1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/etapiv1/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDefaultConnection_CCA695D847",
       "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/etdbserver/databases/ExpenseTrackerDb",
       "type": "mssql.azure",

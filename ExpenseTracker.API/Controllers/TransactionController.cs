@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class TransactionController : BaseController
 {
     public TransactionController(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
