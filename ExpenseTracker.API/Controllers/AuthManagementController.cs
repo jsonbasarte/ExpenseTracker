@@ -1,9 +1,11 @@
 ﻿using ExpenseTracker.API.Configurations;
+using ExpenseTracker.DataService.Data;
 using ExpenseTracker.Entities.Dtos;
 using ExpenseTracker.Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,15 +21,18 @@ public class AuthManagementController : ControllerBase
     private readonly ILogger<AuthManagementController> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtConfig _jwtConfig;
+    private readonly ApplicationDbContext _dbContext;
 
     public AuthManagementController(
         ILogger<AuthManagementController> logger, 
         UserManager<ApplicationUser> userManager,
-        IOptionsMonitor<JwtConfig> optionsMonitor)
+        IOptionsMonitor<JwtConfig> optionsMonitor,
+        ApplicationDbContext dbContext)
     {
         _logger = logger;
         _userManager = userManager;
         _jwtConfig = optionsMonitor.CurrentValue;
+        _dbContext = dbContext;
     }
 
     [HttpPost]
@@ -96,6 +101,17 @@ public class AuthManagementController : ControllerBase
         return BadRequest("Invalid request payload");
     }
 
+    [HttpGet]
+    [Route("current-user")]
+    public async Task<ApplicationUser> GetUserId()
+    {
+        string email = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        return user;
+    }
+
     private string GenerateJwtToken(ApplicationUser user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -119,4 +135,5 @@ public class AuthManagementController : ControllerBase
         var jwtToken = jwtTokenHandler.WriteToken(token);
         return jwtToken;
     }
+
 }

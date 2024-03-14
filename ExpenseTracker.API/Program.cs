@@ -82,6 +82,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+
+// Run migration on app init
 using(var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

@@ -47,7 +47,8 @@ public class TransactionRepository : BaseRepostory<TransactionDetails>, ITransac
     {
         try
         {
-            return await _dbSet.ToListAsync();
+            var response = await _dbSet.ToListAsync();
+            return response;
         }
         catch (Exception e)
         {

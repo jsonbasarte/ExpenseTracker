@@ -19,7 +19,6 @@ public class CreateTransactionDto
     [Required]
     public decimal Amount { get; set; }
 
-    [Required]
     public DateTime Date { get; set; }
 
     [Required]
